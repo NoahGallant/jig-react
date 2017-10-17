@@ -1,4 +1,5 @@
-import React from 'react'
+import App from './App'
+import React, { Component } from 'react'
 import 'isomorphic-fetch'
 import {Provider} from 'rebass'
 import 'styled-components'
@@ -24,7 +25,7 @@ async function appleSearch (query) {
     return fetch('https://itunes.apple.com/search?term='+encodeURI(query)+'&limit=10&media=music&entity=song', search_headers)
 }
 
-class Index extends React.Component {
+class Index extends Component {
     /*static async getInitialProps ({ res }) {
 
     }*/
@@ -51,10 +52,10 @@ class Index extends React.Component {
 
     render(){
         return (
-            <Provider>
+          <App>
                 <input className="input is-large is-fullwidthn" type="text" value={this.state.query} onChange={this.handleChange} />
                 <SongList songs={this.state.results} />
-            </Provider>
+          </App>
 
         )
     }

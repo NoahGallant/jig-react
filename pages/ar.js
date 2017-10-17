@@ -4,6 +4,9 @@ import 'isomorphic-fetch'
 import spotifySearch from '../search'
 import config from '../config'
 
+import App from './App'
+import StyledBox from '../components/StyledBox'
+
 async function soundcloudSearch (query){
     const search_headers = {
         method: 'GET'
@@ -127,6 +130,7 @@ class Ar extends React.Component {
 
     render(){
         return (
+          <App>
             <div>
                 {this.props.trackName} - {this.props.artistName} from {this.props.albumName}
                 <br/>
@@ -149,9 +153,12 @@ class Ar extends React.Component {
                 }
                 <br/>
                 {this.props.soundcloud && (
+                  <StyledBox>
                     <a href={this.props.soundcloudLink}>
                         {this.props.soundcloudTitle}
-                    </a>)
+                    </a>
+                  </StyledBox>
+                )
                 }<br/>
                 {this.props.youtube && (
                     <a href={this.props.youtubeLink}>
@@ -164,6 +171,7 @@ class Ar extends React.Component {
                     </a>)
                 }
             </div>
+          </App>
         )
     }
 }
