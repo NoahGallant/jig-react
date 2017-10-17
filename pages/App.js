@@ -48,21 +48,24 @@ class App extends Component {
                 <JigNavLink
                     href='/'>
                     <img src="/static/jig.svg"/>
-                    <span>JIG</span>
+                    JIG
                 </JigNavLink>
                 <JigNavLink
                     href='/'
-                    children='SEARCH'
                     ml='auto'
-                />
+                >
+                    <span>SEARCH</span>
+                </JigNavLink>
                 <JigNavLink
                     href='/'
-                    children='APP'
-                />
+                >
+                    <span>APP</span>
+                </JigNavLink>
                 <JigNavLink
                     href='/'
-                    children='API'
-                />
+                >
+                    <span>API</span>
+                </JigNavLink>
 
                 </JigToolbar>
                 {this.props.children}
