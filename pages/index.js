@@ -26,10 +26,6 @@ async function appleSearch (query) {
 }
 
 class Index extends Component {
-    /*static async getInitialProps ({ res }) {
-
-    }*/
-
     constructor(props) {
         super(props)
         this.state = {query: '', results: null}

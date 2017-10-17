@@ -5,6 +5,7 @@ import spotifySearch from '../search'
 import config from '../config'
 
 import App from './App'
+import { Box } from 'grid-styled'
 import StyledBox from '../components/StyledBox'
 
 async function soundcloudSearch (query){
@@ -129,46 +130,57 @@ class Ar extends React.Component {
     }
 
     render(){
+      const pageTitle = `Jig — ${this.props.trackName}`;
         return (
-          <App>
+          <App title={pageTitle}>
             <div>
                 {this.props.trackName} - {this.props.artistName} from {this.props.albumName}
-                <br/>
                 <img src={this.props.albumImage}/>
-                <br/>
                 {this.props.popularity}
-                <br/>
                 {this.props.views}
-                <br/>
                 {this.props.hot && (<span>Hot</span>)}
-                <br/>
-                <a href={this.props.appleLink}>
-                    {this.props.trackName}
-                </a>
-                <br/>
-                {this.props.spotify && (
+                <Box width={1/3}>
+                  <a href={this.props.appleLink}>
+                    <StyledBox padding="1rem">
+                      {this.props.trackName}
+                    </StyledBox>
+                  </a>
+                </Box>
+                {this.props.spotify && 
+                  <Box width={1/3}>
                     <a href={this.props.spotifyLink}>
+                      <StyledBox padding="1rem">
                         {this.props.spotifyTitle}
-                    </a>)
-                }
-                <br/>
-                {this.props.soundcloud && (
-                  <StyledBox>
-                    <a href={this.props.soundcloudLink}>
-                        {this.props.soundcloudTitle}
+                      </StyledBox>
                     </a>
-                  </StyledBox>
-                )
-                }<br/>
-                {this.props.youtube && (
-                    <a href={this.props.youtubeLink}>
-                        {this.props.youtubeTitle}
-                    </a>)
-                }<br/>
-                {this.props.genius && (
+                  </Box>
+                }
+                {this.props.genius &&
+                  <Box width={1/3}>
                     <a href={this.props.geniusLink}>
+                      <StyledBox padding="1rem">
                         {this.props.geniusTitle}
-                    </a>)
+                      </StyledBox>
+                    </a>
+                  </Box>
+                }
+                {this.props.soundcloud &&
+                  <Box width={1/2}>
+                    <StyledBox padding="1rem">
+                      <a href={this.props.soundcloudLink}>
+                        {this.props.soundcloudTitle}
+                      </a>
+                    </StyledBox>
+                  </Box>
+                }
+                {this.props.youtube &&
+                  <Box width={1/2}>
+                    <StyledBox padding="1rem">
+                      <a href={this.props.youtubeLink}>
+                        {this.props.youtubeTitle}
+                      </a>
+                    </StyledBox>
+                  </Box>
                 }
             </div>
           </App>
