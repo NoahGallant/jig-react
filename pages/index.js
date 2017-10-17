@@ -27,8 +27,8 @@ async function appleSearch (query) {
 
 class Index extends Component {
     constructor(props) {
-        super(props)
-        this.state = {query: '', results: null}
+        super(props);
+        this.state = {query: '', results: null};
 
         this.handleChange = this.handleChange.bind(this)
     }
