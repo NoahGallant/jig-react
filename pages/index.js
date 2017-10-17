@@ -1,4 +1,4 @@
-import App from './App'
+import Layout from '../components/Layout'
 import React, { Component } from 'react'
 import 'isomorphic-fetch'
 import {Provider} from 'rebass'
@@ -48,10 +48,10 @@ class Index extends Component {
 
     render(){
         return (
-          <App>
+          <Layout>
                 <input className="input is-large is-fullwidthn" type="text" value={this.state.query} onChange={this.handleChange} />
                 <SongList songs={this.state.results} />
-          </App>
+          </Layout>
 
         )
     }

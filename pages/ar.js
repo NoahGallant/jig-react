@@ -4,7 +4,7 @@ import 'isomorphic-fetch'
 import spotifySearch from '../search'
 import config from '../config'
 
-import App from './App'
+import Layout from '../components/Layout'
 import { Box } from 'grid-styled'
 import StyledBox from '../components/StyledBox'
 
@@ -132,7 +132,7 @@ class Ar extends React.Component {
     render(){
       const pageTitle = `Jig — ${this.props.trackName}`;
         return (
-          <App title={pageTitle}>
+          <Layout title={pageTitle}>
             <div>
                 {this.props.trackName} - {this.props.artistName} from {this.props.albumName}
                 <img src={this.props.albumImage}/>
@@ -183,7 +183,7 @@ class Ar extends React.Component {
                   </Box>
                 }
             </div>
-          </App>
+          </Layout>
         )
     }
 }
