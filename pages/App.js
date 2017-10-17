@@ -1,6 +1,34 @@
 import { NavLink, Provider } from 'rebass'
 import React, { Component } from 'react'
 import { Toolbar } from 'rebass'
+import styled from 'styled-components'
+
+const JigToolbar = styled(Toolbar)`
+	background-color: white;
+	color:black;
+`;
+
+const JigNavLink = styled(NavLink)`
+	background-color: white;
+	color:black;
+	font-weight:800;
+	padding:30px;
+	font-size:18px;
+
+    img{
+        width:30px;
+        margin-right:10px;
+    }
+    
+
+
+    &:hover{
+        span{
+            background-color:gray;
+        }
+        background-color:white;
+    }
+`;
 
 class App extends Component {
   constructor(props) {
@@ -9,14 +37,35 @@ class App extends Component {
 
   render() {
     return(
-      <Provider>
-        <Toolbar>
-          <NavLink
-            href='/'
-            children='Search'
-          />
-        </Toolbar>
-        {this.props.children}
+        <Provider theme={{
+            font: '"Work Sans", Helvetica, sans-serif',
+            fontSizes: [
+                12, 16, 24, 36, 48, 72
+            ]
+        }}>
+            <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,800" rel="stylesheet"/>
+            <JigToolbar>
+                <JigNavLink
+                    href='/'>
+                    <img src="/static/jig.svg"/>
+                    <span>JIG</span>
+                </JigNavLink>
+                <JigNavLink
+                    href='/'
+                    children='SEARCH'
+                    ml='auto'
+                />
+                <JigNavLink
+                    href='/'
+                    children='APP'
+                />
+                <JigNavLink
+                    href='/'
+                    children='API'
+                />
+
+                </JigToolbar>
+                {this.props.children}
       </Provider>
     )
   }
