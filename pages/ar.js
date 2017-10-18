@@ -5,8 +5,23 @@ import spotifySearch from '../search'
 import config from '../config'
 
 import Layout from '../components/Layout'
-import { Box } from 'grid-styled'
+import { Box, Flex } from 'rebass'
+import styled from 'styled-components'
 import StyledBox from '../components/StyledBox'
+
+
+const FloatFrame = styled.iframe`
+    position:fixed;
+    width:100%;
+    bottom: 0;
+    left:0;
+    height:110px;
+    border:1px solid black;
+`;
+
+const GridBox = styled(Box)`
+    box-sizing: border-box;
+`;
 
 async function soundcloudSearch (query){
     const search_headers = {
@@ -65,8 +80,8 @@ class Ar extends React.Component {
         const sid = query.e;
         const appleResults = await appleFind(sid);
         const appleTrack = appleResults[0];
-        console.log(appleTrack)
         props['trackName'] = appleTrack.trackCensoredName;
+        props['appleId'] = sid;
         props['artistName'] = appleTrack.artistName;
         const term = props['artistName'].split('&')[0] + " - " + props['trackName'];
         props['appleLink'] = appleTrack.trackViewUrl;
@@ -132,58 +147,63 @@ class Ar extends React.Component {
     render(){
       const pageTitle = `Jig — ${this.props.trackName}`;
         return (
-          <Layout title={pageTitle}>
-            <div>
-                {this.props.trackName} - {this.props.artistName} from {this.props.albumName}
-                <img src={this.props.albumImage}/>
-                {this.props.popularity}
-                {this.props.views}
-                {this.props.hot && (<span>Hot</span>)}
-                <Box width={1/3}>
-                  <a href={this.props.appleLink}>
-                    <StyledBox padding="1rem">
-                      {this.props.trackName}
-                    </StyledBox>
-                  </a>
-                </Box>
-                {this.props.spotify && 
-                  <Box width={1/3}>
-                    <a href={this.props.spotifyLink}>
-                      <StyledBox padding="1rem">
-                        {this.props.spotifyTitle}
-                      </StyledBox>
-                    </a>
-                  </Box>
-                }
-                {this.props.genius &&
-                  <Box width={1/3}>
-                    <a href={this.props.geniusLink}>
-                      <StyledBox padding="1rem">
-                        {this.props.geniusTitle}
-                      </StyledBox>
-                    </a>
-                  </Box>
-                }
-                {this.props.soundcloud &&
-                  <Box width={1/2}>
-                    <StyledBox padding="1rem">
-                      <a href={this.props.soundcloudLink}>
-                        {this.props.soundcloudTitle}
+            <Layout>
+                <FloatFrame src={"//tools.applemusic.com/embed/v1/song/"+this.props.appleId+"?country=us"} width="100%" frameborder="0"></FloatFrame>
+                <Flex justify='center' wrap>
+                    <GridBox width={[1,1/2]}>
+                        <img width='100%' src={this.props.albumImage}/>
+                    </GridBox>
+                    <GridBox width={1/2}>
+                        {this.props.trackName} - {this.props.artistName} from {this.props.albumName}
+                        {this.props.popularity}
+                        {this.props.views}
+                        {this.props.hot && (<span>Hot</span>)}
+                    </GridBox>
+                    <GridBox width={[1,1/3]}>
+                      <a href={this.props.appleLink}>
+                        <StyledBox padding="1rem">
+                          {this.props.trackName}
+                        </StyledBox>
                       </a>
-                    </StyledBox>
-                  </Box>
-                }
-                {this.props.youtube &&
-                  <Box width={1/2}>
-                    <StyledBox padding="1rem">
-                      <a href={this.props.youtubeLink}>
-                        {this.props.youtubeTitle}
-                      </a>
-                    </StyledBox>
-                  </Box>
-                }
-            </div>
-          </Layout>
+                    </GridBox>
+                    {this.props.spotify &&
+                      <GridBox width={[1,1/3]}>
+                        <a href={this.props.spotifyLink}>
+                          <StyledBox padding="1rem">
+                            {this.props.spotifyTitle}
+                          </StyledBox>
+                        </a>
+                      </GridBox>
+                    }
+                    {this.props.genius &&
+                      <GridBox width={[1,1/3]}>
+                        <a href={this.props.geniusLink}>
+                          <StyledBox padding="1rem">
+                            {this.props.geniusTitle}
+                          </StyledBox>
+                        </a>
+                      </GridBox>
+                    }
+                    {this.props.soundcloud &&
+                      <GridBox width={[1,1/2]}>
+                        <StyledBox padding="1rem">
+                          <a href={this.props.soundcloudLink}>
+                            {this.props.soundcloudTitle}
+                          </a>
+                        </StyledBox>
+                      </GridBox>
+                    }
+                    {this.props.youtube &&
+                      <GridBox width={[1,1/2]}>
+                        <StyledBox padding="1rem">
+                          <a href={this.props.youtubeLink}>
+                            {this.props.youtubeTitle}
+                          </a>
+                        </StyledBox>
+                      </GridBox>
+                    }
+                </Flex>
+            </Layout>
         )
     }
 }

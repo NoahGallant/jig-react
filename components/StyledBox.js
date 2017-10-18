@@ -14,6 +14,7 @@ const StyledBox = styled(Box)`
   -webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.25);
   box-shadow: 5px 5px rgba(0, 0, 0, 0.25);
   display: inline-block;
+  box-sizing: border-box;
   padding: ${props => props.padding};
   width: 100%;
 `;

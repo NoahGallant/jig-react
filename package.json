@@ -16,6 +16,7 @@
     "react-dom": "^16.0.0",
     "rebass": "^1.0.4",
     "styled-components": "^2.2.1",
+    "styled-jsx": "^2.1.1",
     "url": "^0.11.0"
   },
   "license": "ISC"
