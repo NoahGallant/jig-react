@@ -8,6 +8,7 @@ const Search = styled.input`
     width: 100%;
     margin-top:40px;
     height:3em;
+    font-family: inherit;
     font-size:18px;
     border:1px solid black;
     box-sizing: border-box;
