@@ -1,44 +1,41 @@
 import Layout from '../components/Layout'
 import React, { Component } from 'react'
+import { Box, Flex } from 'rebass'
 import 'isomorphic-fetch'
 import {Container} from 'rebass'
 import styled from 'styled-components'
+import StyledBox from '../components/StyledBox'
 
 const Search = styled.input`
-    width: 100%;
-    margin-top:40px;
-    height:3em;
-    font-family: inherit;
-    font-size:18px;
-    border:1px solid black;
-    box-sizing: border-box;
-    padding-left:20px;
-    padding-right:20px;
-    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.25);
-    margin-bottom:30px;
-    
-    &:focus{
-        outline:none;
-    }
+  border: 0;
+  font-family: inherit;
+  font-size: 1.25rem;
+  padding: 1rem;
+  width: 100%;
+  
+  &:focus {
+    outline: none;
+  }
 `;
 
 const StyledA = styled.a`
-    background-color:${props => props.color};
-    color:black;
-    text-decoration:underline;
-    font-size:22px;
-    margin-bottom:10px;
-    &:hover{
-        text-decoration:none;
-    }
+  background-color: ${props => props.color};
+  color: black;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration:none;
+  }
 `;
 
 const StyledListItem = styled.li`
-    margin: 2em 0;
+  margin: 2em 0;
 `;
 
 const StyledList = styled.ul`
-    list-style-type:none;
+  list-style-type: none;
 `;
 
 function SongList(props) {
@@ -56,7 +53,12 @@ function SongList(props) {
 
     const songs = props.songs.map((song)=>
         <StyledListItem key={song.trackId}>
-            <StyledA color={colors[Math.floor(Math.random()*colors.length)]} href={"/ar?e="+song.trackId}>{song.trackCensoredName} - {song.artistName}</StyledA>
+            <StyledA
+              color={colors[Math.floor(Math.random() * colors.length)]}
+              href={`/ar?e=${song.trackId}`}
+            >
+              {song.trackCensoredName} - {song.artistName}
+            </StyledA>
         </StyledListItem>
     );
     return (
@@ -65,50 +67,60 @@ function SongList(props) {
 }
 
 const DisplayList = styled(SongList)`
+  width: 100%;
+  
+  img {
     width: 100%;
-    
-    img {
-        width:100%;
-    }
-    
+  }
 `;
 
 async function appleSearch (query) {
     const search_headers = {
         method: 'GET'
     };
-    return fetch('https://itunes.apple.com/search?term='+encodeURI(query)+'&limit=10&media=music&entity=song', search_headers)
+    return fetch(`https://itunes.apple.com/search?term=${encodeURI(query)}&limit=10&media=music&entity=song`, search_headers)
 }
 
 class Index extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {query: '', results: null};
+  constructor(props) {
+    super(props);
+    this.state = {query: '', results: null};
 
-        this.handleChange = this.handleChange.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  async handleChange(event){
+    const query = event.target.value;
+    this.setState({query: query});
+    if (query === '') {
+      this.setState({results: []});
     }
 
-    async handleChange(event){
-        const query = event.target.value;
-        this.setState({query: query});
-        if (query === '') {
-            this.setState({results: []});
-        }
+    const s = await appleSearch(query);
+    const sC = await s.json();
+    this.setState({results: sC.results})
+  }
 
-        const s = await appleSearch(query);
-        const sC = await s.json();
-        this.setState({results: sC.results})
-
-    }
-
-    render(){
-        return (
-            <Layout>
-                <Search placeholder='search for a song...' value={this.state.query} onChange={this.handleChange} />
-                <DisplayList songs={this.state.results} />
-            </Layout>
-        )
-    }
+  render(){
+    return (
+      <Layout>
+        <Flex wrap mx={-2}>
+          <Box width={1} mt={5} mb={2}>
+            <StyledBox>
+              <Search
+                onChange={this.handleChange}
+                placeholder="search for a song..."
+                value={this.state.query}
+              />
+            </StyledBox>
+          </Box>
+          <Box width={1} my={2}>
+            <DisplayList songs={this.state.results} />
+          </Box>
+        </Flex>
+      </Layout>
+    )
+  }
 }
 
 export default Index

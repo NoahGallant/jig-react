@@ -54,10 +54,9 @@ async function geniusFind (query){
         method: 'GET',
         Accept: 'application/json',
         Host: 'api.genius.com',
-        Authorization: 'Bearer '+config.geniusKey
-
+        Authorization: `Bearer ${config.geniusKey}`
     };
-    const results = await fetch('https://api.genius.com/search?q='+encodeURI(query)+"&access_token="+config.geniusKey, search_headers);
+    const results = await fetch(`https://api.genius.com/search?q=${encodeURI(query)}&access_token=${config.geniusKey}`, search_headers);
     const resultsJson = await results.json();
     console.log(resultsJson);
     return resultsJson.response.hits;
