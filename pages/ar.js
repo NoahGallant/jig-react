@@ -6,9 +6,9 @@ import config from '../config'
 
 import Layout from '../components/Layout'
 import { Box, Flex } from 'rebass'
+import SelectText from '../components/SelectText'
 import styled from 'styled-components'
 import StyledBox from '../components/StyledBox'
-
 
 const FloatFrame = styled.iframe`
   position:fixed;
@@ -146,6 +146,10 @@ class Ar extends React.Component {
         return props
     }
 
+    selectText(event) {
+      event.target.focus();
+      event.target.select();
+    }
 
     constructor(props) {
         super(props)
@@ -178,6 +182,13 @@ class Ar extends React.Component {
                 <h3>{this.props.popularity}</h3>
                 <h3>{this.props.views}</h3>
                 <h3>{this.props.hot && (<span>Hot</span>)}</h3>
+              </GridBox>
+              <GridBox width={1} my={4} px={2}>
+                <StyledBox fillColor="lightgrey">
+                  <SelectText onClick={this.selectText}>
+                    {`jig.sh/ar?e=${this.props.appleId}`}
+                  </SelectText>
+                </StyledBox>
               </GridBox>
               <GridBox width={[1,1/3]} px={2}>
                 <a href={this.props.appleLink}>
