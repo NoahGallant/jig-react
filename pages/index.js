@@ -37,6 +37,7 @@ const Placeholder = styled.div`
   margin-bottom:30px;
   margin-left:-10px;
   img{
+    width:100%;
     opacity:0.9;
   }
 
