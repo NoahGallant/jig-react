@@ -1,10 +1,8 @@
-import config from './config'
-
 async function spotifySearch (query){
     const token_headers = {
         method: 'POST',
         headers: {
-            'Authorization': 'Basic ' + config.spotifyEncoded,
+            'Authorization': 'Basic ' + process.env.spotifyEncoded,
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: "grant_type=client_credentials"

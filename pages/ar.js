@@ -2,7 +2,6 @@ import React from 'react'
 import 'isomorphic-fetch'
 
 import spotifySearch from '../search'
-import config from '../config'
 
 import Layout from '../components/Layout'
 import { Box, Flex } from 'rebass'
@@ -12,6 +11,7 @@ import StyledBox from '../components/StyledBox'
 import StyledA from '../components/StyledA'
 import Footer from '../components/Footer'
 import Badge from '../components/Badge'
+
 
 function Popularity(props) {
     if (!props.num){
@@ -142,7 +142,7 @@ async function soundcloudSearch (query){
     const search_headers = {
         method: 'GET'
     };
-    const results = await fetch(`https://api.soundcloud.com/tracks?client_id=${config.soundcloudClientId}&limit=1&q=${encodeURI(query)}`, search_headers)
+    const results = await fetch(`https://api.soundcloud.com/tracks?client_id=${process.env.soundcloudClientId}&limit=1&q=${encodeURI(query)}`, search_headers)
     const resultsJson = await results.json();
     return resultsJson;
 }
@@ -161,9 +161,9 @@ async function geniusFind (query){
         method: 'GET',
         Accept: 'application/json',
         Host: 'api.genius.com',
-        Authorization: `Bearer ${config.geniusKey}`
+        Authorization: `Bearer ${process.env.geniusKey}`
     };
-    const results = await fetch(`https://api.genius.com/search?q=${encodeURI(query)}&access_token=${config.geniusKey}`, search_headers);
+    const results = await fetch(`https://api.genius.com/search?q=${encodeURI(query)}&access_token=${process.env.geniusKey}`, search_headers);
     const resultsJson = await results.json();
     console.log(resultsJson);
     return resultsJson.response.hits;
@@ -173,7 +173,7 @@ async function youtubeFind (query){
     const search_headers = {
         method: 'GET'
     };
-    const results = await fetch(`https://www.googleapis.com/youtube/v3/search?videoTypeId=10&part=snippet&q=${encodeURI(query)}&key=${config.youtubeKey}&maxResults=1`, search_headers)
+    const results = await fetch(`https://www.googleapis.com/youtube/v3/search?videoTypeId=10&part=snippet&q=${encodeURI(query)}&key=${process.env.youtubeKey}&maxResults=1`, search_headers)
     const resultsJson = await results.json();
     return resultsJson.items
 }
@@ -229,7 +229,7 @@ class Ar extends React.Component {
             const youtubeResults = await youtubeFind(term);
             props['youtubeTitle'] = youtubeResults[0].snippet.title;
             const videoId = youtubeResults[0].id.videoId;
-            const stats = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${config.youtubeKey}`);
+            const stats = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${process.env.youtubeKey}`);
             const statsJson = await stats.json();
             props['views'] = statsJson.items[0].statistics.viewCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             props['youtubeLink'] = `https://youtube.com/watch?v=${videoId}`;
