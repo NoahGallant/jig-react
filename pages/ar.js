@@ -9,14 +9,35 @@ import { Box, Flex } from 'rebass'
 import SelectText from '../components/SelectText'
 import styled from 'styled-components'
 import StyledBox from '../components/StyledBox'
+import StyledA from '../components/StyledA'
+import Footer from '../components/Footer'
+import Badge from '../components/Badge'
+
+function Popularity(props) {
+    if (!props.num){
+        return null;
+    }
+    let faces = [];
+    for (let i = 0; i < 5; i++){
+        let op = 0.3;
+        if (i <= props.num){
+            op = 1
+        }
+        faces.push(<Face src='static/face.svg' opaque={op}/>)
+    }
+    return (<Badge color='#FFE6D6'>{faces}</Badge>);
+}
 
 const FloatFrame = styled.iframe`
   position:fixed;
   width:100%;
   bottom: 0;
+  clear:both;
   left:0;
   height:110px;
-  border:1px solid black;
+  border:none;
+  border-top:5px solid #CCD6DD;
+  z-index:3;
 `;
 
 const GridBox = styled(Box)`
@@ -30,6 +51,92 @@ const colors = {
   spotifyGreen: '#D9FFE9',
   youtubeRed: '#FFE1E1'
 };
+
+const Face = styled.img`
+    opacity: ${props => props.opaque};
+    height:20px;
+    vertical-align:middle;
+    margin-right:3px;
+    margin-left:3px;
+    margin-bottom:2px;
+`;
+
+const SongTitle = styled.h1`
+    display:inline;
+    font-size:24px;
+    line-height:24px;
+    font-weight:900;
+`;
+
+const SongInfo = styled.h3`
+    display:inline;
+    font-size:18px;
+    font-weight:500;
+    line-height:0.9;
+    span {
+        color:#999;
+    }
+`;
+
+
+
+
+const Album = styled.img`
+    width:100%;
+    vertical-align:middle;
+    border: 2px solid black;
+    border-radius:10px;
+`;
+
+
+const Subtitle = styled.div`
+    margin-top:30px;
+    margin-bottom:10px;
+    text-align:center;
+    font-weight:300;
+    
+    span{
+        color:#777;
+    }
+`;
+
+const Space = styled.div`
+    content: ' ';
+    height:120px;
+`;
+
+const Lyrics = styled.a`
+    background-color:#fff4a5;
+    color:black;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+    font-size:12px;
+    margin-left:5px;
+    vertical-align:top;
+    padding:8px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    line-height:2;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2);
+    
+    &:hover{
+        box-shadow:none;
+        color:rgba(0,0,0,0.5);
+    }
+`;
+
+const SimilarBox = styled(StyledBox)`
+    img{
+        height:35px;
+        margin-bottom:5px;
+    }
+    div{
+        font-size:16px;
+    }
+
+`;
 
 async function soundcloudSearch (query){
     const search_headers = {
@@ -72,8 +179,10 @@ async function youtubeFind (query){
 }
 
 class Ar extends React.Component {
-    static async getInitialProps (ctx) {
-      const { req, res, query } = ctx;
+    static async getInitialProps ({ req, res, query }) {
+        if (!req){
+            return {reload:true}
+        }
         if (!query.e){
             res.writeHead(301, {
                 Location: '/'
@@ -99,7 +208,7 @@ class Ar extends React.Component {
             const spotifyResults = await spotifySearch(term);
             props['spotifyTitle'] = spotifyResults[0].name;
             props['spotifyLink'] = spotifyResults[0].external_urls.spotify;
-            props['popularity'] = spotifyResults[0].popularity;
+            props['popularity'] = Math.floor(spotifyResults[0].popularity / 20);
             props['spotify'] = true;
         }
         catch (e){
@@ -143,6 +252,7 @@ class Ar extends React.Component {
             console.log('Genius not found')
         }
 
+
         return props
     }
 
@@ -156,87 +266,99 @@ class Ar extends React.Component {
     }
 
     render(){
-      const pageTitle = `Jig — ${this.props.trackName}`;
+        if(this.props.reload){
+            return(<div>
+                    Loading...
+                    <script type='text/javascript'>document.onload() = function(){window.location.assign(window.location.href)}</script>
+                    </div>)
+        }
+      const pageTitle = `Jig — ${this.props.trackName} - ${this.props.artistName}`;
         return (
           <Layout>
+            <title>{ pageTitle }</title>
             <FloatFrame
               src={`//tools.applemusic.com/embed/v1/song/${this.props.appleId}?country=us`}
-              width="100%" frameborder="0"></FloatFrame>
-            <Flex justify='center' mx={-2} wrap>
-              <style jsx>{`
-                .grey {
-                  color: rgba(0, 0, 0, 0.25);
-                }
-              `}</style>
+              width="100%" frameborder="0"/>
+            <Flex mx={-2} wrap>
               <GridBox width={[1,1/2]} px={2}>
-                <img width="100%" src={this.props.albumImage}/>
+                <Album src={this.props.albumImage}/>
               </GridBox>
-              <GridBox width={1/2} px={2}>
-                <h1>{this.props.trackName}</h1>
-                <h2>
-                  <span className="grey"> by </span>
+
+              <GridBox width={[1,1/2]} px={2} mt={'10px'}>
+                <SongTitle>{this.props.trackName}</SongTitle>
+                  {this.props.genius &&
+                  <Lyrics href={this.props.geniusLink}>
+                      LYRICS
+                  </Lyrics>
+                  }
+                  <br/>
+                <SongInfo>
+                  <span> by </span>
                   {this.props.artistName}
-                  <span className="grey"> from </span>
+                  <br/>
+                  <span> from </span>
                   <em>{this.props.albumName}</em>
-                </h2>
-                <h3>{this.props.popularity}</h3>
-                <h3>{this.props.views}</h3>
-                <h3>{this.props.hot && (<span>Hot</span>)}</h3>
+                </SongInfo>
+                  <br/><br/>
+                  <Popularity num={this.props.popularity}/>
+                  <br/>
+                  {this.props.youtube &&
+                    <Badge color='#F1CBFF' size={16}>{this.props.views} views</Badge>
+                  }
               </GridBox>
-              <GridBox width={1} my={4} px={2}>
-                <StyledBox fillColor="lightgrey">
+              <GridBox width={1} mt={'25px'} mb={'15px'} px={2}>
+                <StyledBox fillColor="#EEE" height={48} borderRadius={10} style='margin-bottom:0px' flat>
                   <SelectText onClick={this.selectText}>
-                    {`jig.sh/ar?e=${this.props.appleId}`}
+                      https://jig.sh/ar?e={this.props.appleId}
                   </SelectText>
                 </StyledBox>
               </GridBox>
-              <GridBox width={[1,1/3]} px={2}>
+              <GridBox width={[1,1/2]} px={2}>
                 <a href={this.props.appleLink}>
                   <StyledBox fillColor={colors.appleMusicPink} padding="1rem">
-                    {this.props.trackName}
+                    <img src="static/apple.svg"/>
                   </StyledBox>
                 </a>
               </GridBox>
               {this.props.spotify &&
-                <GridBox width={[1,1/3]} px={2}>
+                <GridBox width={[1,1/2]} px={2}>
                   <a href={this.props.spotifyLink}>
                     <StyledBox fillColor={colors.spotifyGreen} padding="1rem">
-                      {this.props.spotifyTitle}
-                    </StyledBox>
-                  </a>
-                </GridBox>
-              }
-              {this.props.genius &&
-                <GridBox width={[1,1/3]} px={2}>
-                  <a href={this.props.geniusLink}>
-                    <StyledBox fillColor={colors.geniusYellow} padding="1rem">
-                      {this.props.geniusTitle}
+                        <img src="static/spotify.svg"/>
                     </StyledBox>
                   </a>
                 </GridBox>
               }
               <GridBox width={1} px={2}>
-                <h2>Similar Versions</h2>
+                  <Subtitle><Badge color="#EEE">Similar Versions</Badge></Subtitle>
               </GridBox>
               {this.props.soundcloud &&
                 <GridBox width={[1,1/2]} px={2}>
-                  <StyledBox fillColor={colors.soundcloudOrange} padding="1rem">
-                    <a href={this.props.soundcloudLink}>
-                      {this.props.soundcloudTitle}
-                    </a>
-                  </StyledBox>
+                    <StyledA href={this.props.soundcloudLink}>
+                        <SimilarBox fillColor={colors.soundcloudOrange} height={'auto'} padding="1rem">
+                            <img src='static/soundcloud.svg'/>
+                            <div>
+                                {this.props.soundcloudTitle}
+                            </div>
+                        </SimilarBox>
+                    </StyledA>
                 </GridBox>
               }
               {this.props.youtube &&
                 <GridBox width={[1,1/2]} px={2}>
-                  <StyledBox fillColor={colors.youtubeRed} padding="1rem">
-                    <a href={this.props.youtubeLink}>
-                      {this.props.youtubeTitle}
-                    </a>
-                  </StyledBox>
+                    <StyledA href={this.props.youtubeLink}>
+                  <SimilarBox fillColor={colors.youtubeRed} height={'auto'} padding="1rem">
+                      <img src='static/youtube.svg'/>
+                      <div>
+                            {this.props.youtubeTitle}
+                      </div>
+                  </SimilarBox>
+                    </StyledA>
                 </GridBox>
               }
             </Flex>
+              <Footer/>
+              <Space/>
           </Layout>
         )
     }
