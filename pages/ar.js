@@ -253,7 +253,14 @@ class Ar extends React.Component {
         }
 
 
+
         return props
+    }
+
+    componentDidMount () {
+        this.setState({
+            link: window.location.href
+        })
     }
 
     selectText(event) {
@@ -263,6 +270,7 @@ class Ar extends React.Component {
 
     constructor(props) {
         super(props)
+        this.state = {link: ''}
     }
 
     render(){
@@ -308,8 +316,8 @@ class Ar extends React.Component {
               </GridBox>
               <GridBox width={1} mt={'25px'} mb={'15px'} px={2}>
                 <StyledBox fillColor="#EEE" height={48} borderRadius={10} style='margin-bottom:0px' flat>
-                  <SelectText onClick={this.selectText}>
-                      https://jig.sh/ar?e={this.props.appleId}
+                  <SelectText onClick={this.selectText} id='link'>
+                      {this.state.link}
                   </SelectText>
                 </StyledBox>
               </GridBox>

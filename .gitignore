@@ -17,4 +17,4 @@ coverage
 test/**/out
 .DS_Store
 .idea/
-config.js
+.env
