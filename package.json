@@ -1,5 +1,6 @@
 {
-  "name": "jig",
+  "name": "Jig",
+  "description": "A small react app for sharing music across listening platforms.",
   "version": "2.0.0",
   "scripts": {
     "dev": "next",
